@@ -10,9 +10,9 @@ import java.util.List;
 @RestController
 public class HelloController {
 
-    @GetMapping("api/hello")
+    @GetMapping("/api/hello")
     public String hello() {
-        return "Hello World!";
+        return "Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!!1";
     }
 
     @GetMapping("/api/message")
