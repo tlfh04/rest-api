@@ -2,6 +2,7 @@ package com.example.restapi.controller;
 
 import com.example.restapi.dto.request.TodoCreateRequest;
 import com.example.restapi.dto.request.TodoUpdateRequest;
+import com.example.restapi.dto.response.ApiResponse;
 import com.example.restapi.dto.response.TodoResponse;
 import com.example.restapi.entity.Todo;
 import com.example.restapi.service.TodoService;
@@ -22,37 +23,38 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<TodoResponse> create(
+    public ResponseEntity<ApiResponse<TodoResponse>> create(
             @Valid @RequestBody TodoCreateRequest request
     ) {
         TodoResponse response = todoService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
     }
 
     @GetMapping
-    public ResponseEntity<List<TodoResponse>> findAll() {
+    public ResponseEntity<ApiResponse<List<TodoResponse>>> findAll() {
         List<TodoResponse> responses = todoService.findAll();
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TodoResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TodoResponse>> findById(@PathVariable Long id) {
         TodoResponse response = todoService.findById(id);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         todoService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TodoResponse> update(
+    public ResponseEntity<ApiResponse<TodoResponse>> update(
             @PathVariable Long id,
             @Valid @RequestBody TodoUpdateRequest request
     ) {
         TodoResponse response = todoService.update(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
