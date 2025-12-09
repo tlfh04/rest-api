@@ -26,10 +26,15 @@ public class Todo {
 
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
     @Builder
-    public Todo(String title, String content) {
+    public Todo(String title, String content,User user) {
         this.title = title;
         this.content = content;
+        this.user = user;
         this.completed = false;
         this.createdAt = LocalDateTime.now();
     }
@@ -37,6 +42,5 @@ public class Todo {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
-
     }
 }

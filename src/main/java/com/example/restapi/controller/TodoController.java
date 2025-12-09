@@ -5,11 +5,13 @@ import com.example.restapi.dto.request.TodoUpdateRequest;
 import com.example.restapi.dto.response.ApiResponse;
 import com.example.restapi.dto.response.TodoResponse;
 import com.example.restapi.entity.Todo;
+import com.example.restapi.security.CustomUserDetails;
 import com.example.restapi.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +26,10 @@ public class TodoController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<TodoResponse>> create(
-            @Valid @RequestBody TodoCreateRequest request
+            @Valid @RequestBody TodoCreateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        TodoResponse response = todoService.create(request);
+        TodoResponse response = todoService.create(request,userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response));
     }
@@ -38,7 +41,8 @@ public class TodoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<TodoResponse>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TodoResponse>> findById(
+            @PathVariable Long id) {
         TodoResponse response = todoService.findById(id);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
