@@ -28,7 +28,7 @@ public class JwtProvider {
     }
 
     // JWT 토큰 발행
-    private String createToken(String username){
+    public String createToken(String username){
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 
